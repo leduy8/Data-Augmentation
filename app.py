@@ -1,34 +1,52 @@
-from plotImages import plotImages
+from image_utils import plot_images, gen_images
+from file_utils import read_files_from_dir
 
-import matplotlib.pyplot as plt
-import numpy as np
-import os
-import random
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-gen = ImageDataGenerator(rotation_range=10, width_shift_range=0.1, height_shift_range=0.1,
-                         shear_range=0.15, zoom_range=0.1, channel_shift_range=10, horizontal_flip=True)
+# * Get all available paths
+train_healthy_image_path = 'data/train/healthy/'
+train_rust_image_path = 'data/train/rust/'
+train_scab_image_path = 'data/train/scab/'
+valid_healthy_image_path = 'data/valid/healthy/'
+valid_rust_image_path = 'data/valid/rust/'
+valid_scab_image_path = 'data/valid/scab/'
+test_healthy_image_path = 'data/test/healthy/'
+test_rust_image_path = 'data/test/rust/'
+test_scab_image_path = 'data/test/scab/'
 
-# * Choose random image from disk
-chosen_image = random.choice(os.listdir('data/dogs-vs-cats/train/dog'))
+# * Read all image filenames
+train_healthy_image_filenames = read_files_from_dir(train_healthy_image_path)
+train_rust_image_filenames = read_files_from_dir(train_rust_image_path)
+train_scab_image_filenames = read_files_from_dir(train_scab_image_path)
+valid_healthy_image_filenames = read_files_from_dir(valid_healthy_image_path)
+valid_rust_image_filenames = read_files_from_dir(valid_rust_image_path)
+valid_scab_image_filenames = read_files_from_dir(valid_scab_image_path)
+test_healthy_image_filenames = read_files_from_dir(test_healthy_image_path)
+test_rust_image_filenames = read_files_from_dir(test_rust_image_path)
+test_scab_image_filenames = read_files_from_dir(test_scab_image_path)
 
-image_path = 'data/dogs-vs-cats/train/dog/' + chosen_image
+for chosen_image in train_healthy_image_filenames:
+    gen_images(chosen_image=chosen_image, path=train_healthy_image_path)
 
-# * Expand the dimensions so that the image can use for later
-image = np.expand_dims(plt.imread(image_path), 0)
-# plt.imshow(image[0])
+for chosen_image in train_rust_image_filenames:
+    gen_images(chosen_image=chosen_image, path=train_rust_image_path)
 
-# * Take data and label data, generate batches of augument data
-# aug_iter = gen.flow(image)
+for chosen_image in train_scab_image_filenames:
+    gen_images(chosen_image=chosen_image, path=train_scab_image_path)
 
-# * Get 10 samples from augmented data and plot the images
-# aug_images = [next(aug_iter)[0].astype(np.uint8) for i in range(10)]
-# plotImages(aug_images)
+for chosen_image in valid_healthy_image_filenames:
+    gen_images(chosen_image=chosen_image, path=valid_healthy_image_path)
 
-# * Save augmented data
-aug_iter = gen.flow(image, save_to_dir='data/dogs-vs-cats/train/dog',
-                    save_prefix='aug-image-', save_format='jpeg')
+for chosen_image in valid_rust_image_filenames:
+    gen_images(chosen_image=chosen_image, path=valid_rust_image_path)
 
-aug_images = [next(aug_iter)[0].astype(np.uint8) for i in range(10)]
+for chosen_image in valid_scab_image_filenames:
+    gen_images(chosen_image=chosen_image, path=valid_scab_image_path)
+
+for chosen_image in test_healthy_image_filenames:
+    gen_images(chosen_image=chosen_image, path=test_healthy_image_path)
+
+for chosen_image in test_rust_image_filenames:
+    gen_images(chosen_image=chosen_image, path=test_rust_image_path)
+
+for chosen_image in test_scab_image_filenames:
+    gen_images(chosen_image=chosen_image, path=test_scab_image_path)
